@@ -21,13 +21,14 @@ export class Line {
     constructor(A: number, B: number, C: number);
     constructor(A: number, B: number, thru: Point);
     constructor(A: Point, B: Point);
+    // deno-lint-ignore no-explicit-any
     constructor(...args: any[]) {
         if (args.length == 3) {
             if (args[2] instanceof Point) {
                 this.A = args[0];
                 this.B = args[1];
-                let x = args[2].x;
-                let y = args[2].y;
+                const x = args[2].x;
+                const y = args[2].y;
                 this.C = -this.A * x - this.B * y;
                 return;
             } else if (typeof args[2] === "number") {
@@ -37,8 +38,8 @@ export class Line {
                 return;
             }
         } else if (args.length == 2) {
-            let A = args[0];
-            let B = args[1];
+            const A = args[0];
+            const B = args[1];
             if (A.x == B.x && A.y == B.y)
                 throw new Error(
                     "Defining a line using only one distinct point"
@@ -47,14 +48,14 @@ export class Line {
             this.B = B.x - A.x;
             this.C = A.y * (A.x - B.x) - A.x * (A.y - B.y);
             return;
-        };
+        }
         throw argError("constructing line", args);
     }
 
     toString() {
-        let a = this.A == 0 ? "" : `${this.A}x + `;
-        let b = this.B == 0 ? "" : `${this.B}y + `;
-        let c = this.C == 0 ? "" : this.C.toString();
+        const a = this.A == 0 ? "" : `${this.A}x + `;
+        const b = this.B == 0 ? "" : `${this.B}y + `;
+        const c = this.C == 0 ? "" : this.C.toString();
         return a + b + c + " = 0";
     }
 }
@@ -65,6 +66,7 @@ export class Circle {
     constructor(O: Point, r: number);
     constructor(O: Point, A: Point);
     constructor(A: Point, B: Point, C: Point);
+    // deno-lint-ignore no-explicit-any
     constructor(...args: any[]) {
         if (args.length == 2) {
             if (typeof args[1] === "number") {
@@ -83,7 +85,7 @@ export class Circle {
             );
             this.r = distanceSq(this.O, args[1]);
             return;
-        };
+        }
         throw argError("constructing circle", args);
     }
 }

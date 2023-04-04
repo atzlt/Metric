@@ -48,9 +48,9 @@ export function interLL(l: Line, k: Line) {
             l.toString() + " and " +
             k.toString()
         );
-    let a = l.B * k.C - k.B * l.C;
-    let b = l.C * k.A - k.C * l.A;
-    let d = l.A * k.B - k.A * l.B;
+    const a = l.B * k.C - k.B * l.C;
+    const b = l.C * k.A - k.C * l.A;
+    const d = l.A * k.B - k.A * l.B;
     return new Point(a / d, b / d);
 }
 
@@ -59,43 +59,43 @@ export function interLL(l: Line, k: Line) {
  * @returns The list of intersections. If there are none, returns an empty list `[]`.
  */
 export function interLC(l: Line, c: Circle, common?: Point) {
-    let O = c.O;
-    let r = c.r;
+    const O = c.O;
+    const r = c.r;
     if (l.A != 0) {
-        let ya = l.A * l.A + l.B * l.B;
-        let yb = 2 * ((l.A * O.x + l.C) * l.B - l.A * l.A * O.y);
+        const ya = l.A * l.A + l.B * l.B;
+        const yb = 2 * ((l.A * O.x + l.C) * l.B - l.A * l.A * O.y);
         if (common) {
-            let y2 = -yb / ya - common.y;
+            const y2 = -yb / ya - common.y;
             return [new Point(-(l.B * y2 + l.C) / l.A, y2)];
         } else {
-            let yc =
+            const yc =
                 l.A * l.A * (O.y * O.y - r * r) +
                 (l.A * O.x + l.C) * (l.A * O.x + l.C);
             let D = yb * yb - 4 * ya * yc;
             if (D < 0) return [];
             D = Math.sqrt(D);
-            let y1 = (-yb + D) / ya / 2;
-            let y2 = (-yb - D) / ya / 2;
+            const y1 = (-yb + D) / ya / 2;
+            const y2 = (-yb - D) / ya / 2;
             return [
                 new Point(-(l.B * y1 + l.C) / l.A, y1),
                 new Point(-(l.B * y2 + l.C) / l.A, y2),
             ];
         }
     } else {
-        let xa = l.B * l.B;
-        let xb = 2 * - l.B * l.B * O.x;
+        const xa = l.B * l.B;
+        const xb = 2 * - l.B * l.B * O.x;
         if (common) {
-            let x2 = -xb / xa - common.x;
+            const x2 = -xb / xa - common.x;
             return [new Point(x2, -l.C / l.B)];
         } else {
-            let xc =
+            const xc =
                 l.B * l.B * (O.x * O.x - r * r) +
                 (l.B * O.y + l.C) * (l.B * O.y + l.C);
             let D = xb * xb - 4 * xa * xc;
             if (D < 0) return [];
             D = Math.sqrt(D);
-            let x1 = (-xb + D) / xa / 2;
-            let x2 = (-xb - D) / xa / 2;
+            const x1 = (-xb + D) / xa / 2;
+            const x2 = (-xb - D) / xa / 2;
             return [
                 new Point(x1, -l.C / l.B),
                 new Point(x2, -l.C / l.B),
@@ -109,12 +109,12 @@ export function interLC(l: Line, c: Circle, common?: Point) {
  * @returns The radical axis.
  */
 export function radicalAxis(c: Circle, d: Circle) {
-    let D1 = -2 * c.O.x;
-    let E1 = -2 * c.O.y;
-    let F1 = c.O.x * c.O.x + c.O.y * c.O.y - c.r * c.r;
-    let D2 = -2 * d.O.x;
-    let E2 = -2 * d.O.y;
-    let F2 = d.O.x * d.O.x + d.O.y * d.O.y - d.r * d.r;
+    const D1 = -2 * c.O.x;
+    const E1 = -2 * c.O.y;
+    const F1 = c.O.x * c.O.x + c.O.y * c.O.y - c.r * c.r;
+    const D2 = -2 * d.O.x;
+    const E2 = -2 * d.O.y;
+    const F2 = d.O.x * d.O.x + d.O.y * d.O.y - d.r * d.r;
     return new Line(D1 - D2, E1 - E2, F1 - F2);
 }
 
@@ -139,7 +139,7 @@ export function distanceSq(X: Point | Line, Y: Point | Line): number {
     if (X instanceof Point && Y instanceof Point) {
         return (X.x - Y.x) * (X.x - Y.x) + (X.y - Y.y) * (X.y - Y.y);
     } else if (X instanceof Point && Y instanceof Line) {
-        let z = (X.x * Y.A + X.y * Y.B + Y.C);
+        const z = (X.x * Y.A + X.y * Y.B + Y.C);
         return z * z / (Y.A * Y.A + Y.B * Y.B);
     } else if (X instanceof Line && Y instanceof Point) {
         return distanceSq(Y, X);
@@ -150,9 +150,9 @@ export function distanceSq(X: Point | Line, Y: Point | Line): number {
                 X.toString() + "and" +
                 Y.toString()
             );
-        let z = X.C - Y.C;
+        const z = X.C - Y.C;
         return z * z / (X.A * X.A + X.B * X.B);
-    };
+    }
     throw argError("squared distance", [X, Y]);
 }
 
@@ -179,7 +179,7 @@ export function midpoint(A: Point, B: Point) {
 
 function sum(x: number[]) {
     let s = 0;
-    for (let i of x) s += i;
+    for (const i of x) s += i;
     return s;
 }
 
@@ -192,8 +192,8 @@ function mean(x: number[]) {
  * @returns The center.
  */
 export function center(P: Point[]) {
-    let xs = P.map((p, _) => p.x);
-    let ys = P.map((p, _) => p.y);
+    const xs = P.map((p, _) => p.x);
+    const ys = P.map((p, _) => p.y);
     return new Point(mean(xs), mean(ys));
 }
 

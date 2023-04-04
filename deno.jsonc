@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "bench": "deno bench bench/",
+    "test": "deno test --coverage=coverage/cov_profile test/ && deno task cov --quiet",
+    "cov": "deno coverage --lcov --output=coverage/cov.lcov coverage/cov_profile && genhtml -o coverage/cov_html coverage/cov.lcov"
+  }
+}

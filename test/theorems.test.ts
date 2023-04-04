@@ -1,5 +1,5 @@
 import { assert } from "https://deno.land/std@0.182.0/testing/asserts.ts";
-import { center, interCC, interLC, interLL, isParallel, isThrough, perp, perp_bisect } from "../src/calc/basic.ts";
+import { center, interCC, interLC, interLL, isCollinear, isParallel, perp, perp_bisect } from "../src/calc/basic.ts";
 import { onCircle } from "../src/calc/point_on.ts";
 import { Circle, Line, Point } from "../src/objects.ts";
 
@@ -26,6 +26,6 @@ Deno.test({
         const O = interLL(perp_bisect(A, B), perp_bisect(B, C));
         const H = interLL(perp(A, new Line(B, C)), perp(B, new Line(A, C)));
         const G = center([A, B, C]);
-        assert(isThrough(new Line(O, H), G));
+        assert(isCollinear(O, H, G));
     }
 });

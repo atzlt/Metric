@@ -15,7 +15,9 @@ jobs:
         with:
           deno-version: v1.8
       - name: Create coverage files
-        run: deno task test
+        run: deno test --coverage=coverage/cov_profile test/
+      - name: Generate lcov file
+        run: deno coverage --lcov --output=coverage/cov.lcov coverage/cov_profile
       - name: Collect coverage
         uses: codecov/codecov-action@v1.0.10 # upload the report on Codecov
         with:

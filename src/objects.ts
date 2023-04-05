@@ -1,4 +1,4 @@
-import { distanceSq, interLL, perp_bisect } from "./calc/basic.ts";
+import { distance, interLL, perp_bisect } from "./calc/basic.ts";
 import { argError } from "./errors.ts";
 
 export class Point {
@@ -53,8 +53,8 @@ export class Line {
     }
 
     toString() {
-        const a = this.A == 0 ? "" : `${this.A}x + `;
-        const b = this.B == 0 ? "" : `${this.B}y + `;
+        const a = this.A == 0 ? "" : `${this.A == 1 ? "" : this.A}x + `;
+        const b = this.B == 0 ? "" : `${this.B == 1 ? "" : this.B}y + `;
         const c = this.C == 0 ? "" : this.C.toString();
         return a + b + c + " = 0";
     }
@@ -75,7 +75,7 @@ export class Circle {
                 return;
             } else if (args[1] instanceof Point) {
                 this.O = args[0];
-                this.r = distanceSq(args[0], args[1]);
+                this.r = distance(args[0], args[1]);
                 return;
             }
         } else if (args.length == 3) {
@@ -83,7 +83,7 @@ export class Circle {
                 perp_bisect(args[0], args[1]),
                 perp_bisect(args[1], args[2])
             );
-            this.r = distanceSq(this.O, args[1]);
+            this.r = distance(this.O, args[1]);
             return;
         }
         throw argError("constructing circle", args);

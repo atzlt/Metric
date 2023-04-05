@@ -25,7 +25,7 @@ Deno.test({
         const C = new Point(0.5, 8.2);
         const O = interLL(perp_bisect(A, B), perp_bisect(B, C));
         const H = interLL(perp(A, new Line(B, C)), perp(B, new Line(A, C)));
-        const G = center([A, B, C]);
+        const G = center(A, B, C);
         assert(isCollinear(O, H, G));
     }
 });

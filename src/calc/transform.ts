@@ -42,5 +42,5 @@ export function reflectIn(X: GObject, Y: Point | Line) {
             return new Circle(reflectIn(X.O, Y), X.r);
         }
     }
-    throw argError("symmetry", [X, Y]);
+    throw argError("reflect", [X, Y]);
 }

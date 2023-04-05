@@ -30,11 +30,29 @@ export function isThrough(x: Line | Circle, P: Point) {
     }
 }
 
+function isProportional(x: number, y: number, s: number, t: number) {
+    return aprxEq(x * t, y * s);
+}
+
 /**
  * Determines whether the three points are collinear.
  */
 export function isCollinear(A: Point, B: Point, C: Point) {
-    return aprxEq((A.x - B.x) * (A.y - C.y), (A.y - B.y) * (A.x - C.x));
+    return isProportional(A.x - B.x, A.y - B.y, A.x - C.x, A.y - C.y);
+}
+
+export function isOverlap(X: Point, Y: Point): boolean;
+export function isOverlap(X: Line, Y: Line): boolean;
+export function isOverlap(X: Circle, Y: Circle): boolean;
+export function isOverlap(X: GObject, Y: GObject) {
+    if (X instanceof Point && Y instanceof Point) {
+        return aprxEq(X.x, Y.x) && aprxEq(X.y, Y.y);
+    } else if (X instanceof Line && Y instanceof Line) {
+        return isProportional(X.A, X.B, Y.A, Y.B) && isProportional(X.B, X.C, Y.B, Y.C);
+    } else if (X instanceof Circle && Y instanceof Circle) {
+        return isOverlap(X.O, Y.O) && aprxEq(X.r, Y.r);
+    }
+    throw argError("checking overlap", [X, Y]);
 }
 
 /**
@@ -191,7 +209,7 @@ function mean(x: number[]) {
  * Find the center (of gravity) of an array of points.
  * @returns The center.
  */
-export function center(P: Point[]) {
+export function center(...P: Point[]) {
     const xs = P.map((p, _) => p.x);
     const ys = P.map((p, _) => p.y);
     return new Point(mean(xs), mean(ys));
@@ -207,12 +225,13 @@ export function center(P: Point[]) {
  */
 export function parallel(A: Point, l: Line): Line;
 export function parallel(l: Line, A: Point): Line;
-export function parallel(X: GObject, Y: GObject) {
+export function parallel(X: Point | Line, Y: Point | Line) {
     if (X instanceof Point && Y instanceof Line) {
         return new Line(Y.A, Y.B, -(Y.A * X.x + Y.B * X.y));
     } else if (X instanceof Line && Y instanceof Point) {
         return parallel(Y, X);
-    } else throw argError("parallel", [X, Y]);
+    }
+    throw argError("parallel", [X, Y]);
 }
 
 /**
@@ -225,16 +244,21 @@ export function parallel(X: GObject, Y: GObject) {
  */
 export function perp(A: Point, l: Line): Line;
 export function perp(l: Line, A: Point): Line;
-export function perp(X: GObject, Y: GObject) {
+export function perp(X: Point | Line, Y: Point | Line) {
     if (X instanceof Point && Y instanceof Line) {
         return new Line(-Y.B, Y.A, Y.B * X.x - Y.A * X.y);
     } else if (X instanceof Line && Y instanceof Point) {
-        return parallel(Y, X);
-    } else throw argError("parallel", [X, Y]);
+        return perp(Y, X);
+    }
+    throw argError("perpendicular", [X, Y]);
 }
 
 export function projection(A: Point, l: Line) {
-    return interLL(perp(A, l), l);
+    const n = (l.A * l.A + l.B * l.B);
+    return new Point(
+        (l.B * l.B * A.x - l.A * l.C - l.A * l.B * A.y) / n,
+        (l.A * l.A * A.y - l.B * l.C - l.A * l.B * A.x) / n,
+    );
 }
 
 /**

@@ -1,7 +1,7 @@
 import { assert, assertEquals } from "https://deno.land/std@0.182.0/testing/asserts.ts";
 import { reflectIn } from "../src/calc/transform.ts";
 import { Point, Circle, Line } from "../src/objects.ts";
-import { isParallel, isThrough } from "../src/calc/basic.ts";
+import { isOverlap, isParallel, isThrough } from "../src/calc/basic.ts";
 
 Deno.test({
     name: "reflect",
@@ -14,6 +14,7 @@ Deno.test({
         const m = new Line(2, -1, 0);
         const n = new Line(3, -4, -20);
         const l1 = reflectIn(l, m);
+        const l2 = reflectIn(l, A);
         const A1 = reflectIn(A, l);
         const c1 = reflectIn(c, l);
         const c2 = reflectIn(c, B);
@@ -28,5 +29,6 @@ Deno.test({
         assertEquals(c2.O.x, A2.x);
         assertEquals(c2.O.y, A2.y);
         assert(isThrough(k1, new Point(-1, 6)));
+        assert(isOverlap(l2, new Line(1, 0, 6)));
     }
 });

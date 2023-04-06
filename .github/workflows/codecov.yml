@@ -1,23 +1,25 @@
 name: Codecov
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.7.0
-      - uses: denolib/setup-deno@v2.3.0
-        with:
-          deno-version: v1.32.3
-      - name: Generate lcov file
-        run: ./tasks/test
-      - name: Collect coverage
-        uses: codecov/codecov-action@v3.1.1
-        with:
-          file: ./coverage/cov.lcov
-          token: ${{ secrets.CODECOV_TOKEN }}
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2.7.0
+            - uses: denolib/setup-deno@v2.3.0
+              with:
+                  deno-version: v1.32.3
+            - name: Run test
+              run: deno test --coverage=coverage/cov_profile test/
+            - name: Generace LCOV
+              run: deno coverage --lcov --output=coverage/cov.lcov --exclude="(src/errors.ts)|(src/calc/advanced/.*)|(test/.*)" coverage/cov_profile
+            - name: Collect coverage
+              uses: codecov/codecov-action@v3.1.1
+              with:
+                  file: ./coverage/cov.lcov
+                  token: ${{ secrets.CODECOV_TOKEN }}

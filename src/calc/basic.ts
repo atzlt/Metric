@@ -48,7 +48,8 @@ export function isOverlap(X: GObject, Y: GObject) {
     if (X instanceof Point && Y instanceof Point) {
         return aprxEq(X.x, Y.x) && aprxEq(X.y, Y.y);
     } else if (X instanceof Line && Y instanceof Line) {
-        return isProportional(X.A, X.B, Y.A, Y.B) && isProportional(X.B, X.C, Y.B, Y.C);
+        return isProportional(X.A, X.B, Y.A, Y.B) &&
+            isProportional(X.B, X.C, Y.B, Y.C);
     } else if (X instanceof Circle && Y instanceof Circle) {
         return isOverlap(X.O, Y.O) && aprxEq(X.r, Y.r);
     }
@@ -60,12 +61,13 @@ export function isOverlap(X: GObject, Y: GObject) {
  * @returns The intersection of two lines.
  */
 export function interLL(l: Line, k: Line) {
-    if (isParallel(l, k))
+    if (isParallel(l, k)) {
         throw new Error(
             "Parallel lines has no intersections: computing interLL " +
-            l.toString() + " and " +
-            k.toString()
+                l.toString() + " and " +
+                k.toString(),
         );
+    }
     const a = l.B * k.C - k.B * l.C;
     const b = l.C * k.A - k.C * l.A;
     const d = l.A * k.B - k.A * l.B;
@@ -86,8 +88,7 @@ export function interLC(l: Line, c: Circle, common?: Point) {
             const y2 = -yb / ya - common.y;
             return [new Point(-(l.B * y2 + l.C) / l.A, y2)];
         } else {
-            const yc =
-                l.A * l.A * (O.y * O.y - r * r) +
+            const yc = l.A * l.A * (O.y * O.y - r * r) +
                 (l.A * O.x + l.C) * (l.A * O.x + l.C);
             let D = yb * yb - 4 * ya * yc;
             if (D < 0) return [];
@@ -101,13 +102,12 @@ export function interLC(l: Line, c: Circle, common?: Point) {
         }
     } else {
         const xa = l.B * l.B;
-        const xb = 2 * - l.B * l.B * O.x;
+        const xb = 2 * -l.B * l.B * O.x;
         if (common) {
             const x2 = -xb / xa - common.x;
             return [new Point(x2, -l.C / l.B)];
         } else {
-            const xc =
-                l.B * l.B * (O.x * O.x - r * r) +
+            const xc = l.B * l.B * (O.x * O.x - r * r) +
                 (l.B * O.y + l.C) * (l.B * O.y + l.C);
             let D = xb * xb - 4 * xa * xc;
             if (D < 0) return [];
@@ -157,17 +157,18 @@ export function distanceSq(X: Point | Line, Y: Point | Line): number {
     if (X instanceof Point && Y instanceof Point) {
         return (X.x - Y.x) * (X.x - Y.x) + (X.y - Y.y) * (X.y - Y.y);
     } else if (X instanceof Point && Y instanceof Line) {
-        const z = (X.x * Y.A + X.y * Y.B + Y.C);
+        const z = X.x * Y.A + X.y * Y.B + Y.C;
         return z * z / (Y.A * Y.A + Y.B * Y.B);
     } else if (X instanceof Line && Y instanceof Point) {
         return distanceSq(Y, X);
     } else if (X instanceof Line && Y instanceof Line) {
-        if (!isParallel(X, Y))
+        if (!isParallel(X, Y)) {
             throw new Error(
                 "Cannot compute distance between lines that are not parallel: " +
-                X.toString() + "and" +
-                Y.toString()
+                    X.toString() + "and" +
+                    Y.toString(),
             );
+        }
         const z = X.C - Y.C;
         return z * z / (X.A * X.A + X.B * X.B);
     }
@@ -254,7 +255,7 @@ export function perp(X: Point | Line, Y: Point | Line) {
 }
 
 export function projection(A: Point, l: Line) {
-    const n = (l.A * l.A + l.B * l.B);
+    const n = l.A * l.A + l.B * l.B;
     return new Point(
         (l.B * l.B * A.x - l.A * l.C - l.A * l.B * A.y) / n,
         (l.A * l.A * A.y - l.B * l.C - l.A * l.B * A.x) / n,
@@ -265,6 +266,6 @@ export function projection(A: Point, l: Line) {
  * Construct the perpendicular bisector of two points.
  * @returns The perpendicular bisector.
  */
-export function perp_bisect(A: Point, B: Point) {
+export function perpBisect(A: Point, B: Point) {
     return perp(midpoint(A, B), new Line(A, B));
 }

@@ -3,7 +3,7 @@ import { Circle, Point } from "../objects.ts";
 /**
  * Define a point on circle by an angle (starts from the direction of the x-axis, rotates
  * counter-clockwise).
- * 
+ *
  * @param c The circle.
  * @param angle The angle, _in radians_.
  */

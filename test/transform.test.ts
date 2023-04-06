@@ -1,6 +1,9 @@
-import { assert, assertEquals } from "https://deno.land/std@0.182.0/testing/asserts.ts";
+import {
+    assert,
+    assertEquals,
+} from "https://deno.land/std@0.182.0/testing/asserts.ts";
 import { reflectIn } from "../src/calc/transform.ts";
-import { Point, Circle, Line } from "../src/objects.ts";
+import { Circle, Line, Point } from "../src/objects.ts";
 import { isOverlap, isParallel, isThrough } from "../src/calc/basic.ts";
 
 Deno.test({
@@ -30,5 +33,5 @@ Deno.test({
         assertEquals(c2.O.y, A2.y);
         assert(isThrough(k1, new Point(-1, 6)));
         assert(isOverlap(l2, new Line(1, 0, 6)));
-    }
+    },
 });

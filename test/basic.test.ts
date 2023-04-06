@@ -1,12 +1,23 @@
 import {
-    assertEquals,
-    assertAlmostEquals,
-    assertThrows,
     assert,
+    assertAlmostEquals,
+    assertEquals,
     assertFalse,
+    assertThrows,
 } from "https://deno.land/std@0.182.0/testing/asserts.ts";
-import { Line, Point, Circle } from "../src/objects.ts";
-import { distance, interCC, interLC, interLL, isCollinear, isParallel, isThrough, parallel, perp, projection } from "../src/calc/basic.ts";
+import { Circle, Line, Point } from "../src/objects.ts";
+import {
+    distance,
+    interCC,
+    interLC,
+    interLL,
+    isCollinear,
+    isParallel,
+    isThrough,
+    parallel,
+    perp,
+    projection,
+} from "../src/calc/basic.ts";
 
 Deno.test({
     name: "GObjects definition",
@@ -31,7 +42,7 @@ Deno.test({
         assertThrows(() => new Circle(A, B, E));
         assertEquals(B.toString(), "(0, 1)");
         assertEquals(m.toString(), "x + y + -1 = 0");
-    }
+    },
 });
 
 Deno.test({
@@ -50,7 +61,7 @@ Deno.test({
         assert(isCollinear(A, B, C));
         assert(isThrough(c, B));
         assertFalse(isThrough(l0, C));
-    }
+    },
 });
 
 Deno.test({
@@ -66,8 +77,8 @@ Deno.test({
         assert(isThrough(parallel(l, A), new Point(3, 1)));
         assert(isThrough(perp(A, l), new Point(1, 2.5)));
         assert(isThrough(perp(k, A), new Point(1, 2)));
-    }
-})
+    },
+});
 
 Deno.test({
     name: "distance",
@@ -80,8 +91,8 @@ Deno.test({
         assertEquals(distance(k, A), Math.SQRT2);
         assertEquals(distance(k, l), Math.SQRT1_2);
         assertThrows(() => distance(k, m));
-    }
-})
+    },
+});
 
 Deno.test({
     name: "interLL, interLC",
@@ -102,7 +113,7 @@ Deno.test({
         assertAlmostEquals(E.x, 0);
         assertAlmostEquals(F.y, 1);
         assertThrows(() => interLL(l, p));
-    }
+    },
 });
 
 Deno.test({
@@ -133,5 +144,5 @@ Deno.test({
         assertAlmostEquals(K.x, 7);
         const [H] = interCC(c, d, D);
         assertAlmostEquals(H.y, -4);
-    }
+    },
 });

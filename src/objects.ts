@@ -1,4 +1,4 @@
-import { distance, interLL, perp_bisect } from "./calc/basic.ts";
+import { distance, interLL, perpBisect } from "./calc/basic.ts";
 import { argError } from "./errors.ts";
 
 export class Point {
@@ -13,6 +13,8 @@ export class Point {
         return `(${this.x}, ${this.y})`;
     }
 }
+
+export const O = new Point(0, 0);
 
 export class Line {
     A: number;
@@ -40,10 +42,11 @@ export class Line {
         } else if (args.length == 2) {
             const A = args[0];
             const B = args[1];
-            if (A.x == B.x && A.y == B.y)
+            if (A.x == B.x && A.y == B.y) {
                 throw new Error(
-                    "Defining a line using only one distinct point"
+                    "Defining a line using only one distinct point",
                 );
+            }
             this.A = A.y - B.y;
             this.B = B.x - A.x;
             this.C = A.y * (A.x - B.x) - A.x * (A.y - B.y);
@@ -59,6 +62,9 @@ export class Line {
         return a + b + c + " = 0";
     }
 }
+
+export const xx = new Line(1, 0, 0);
+export const yy = new Line(0, 1, 0);
 
 export class Circle {
     O: Point;
@@ -80,8 +86,8 @@ export class Circle {
             }
         } else if (args.length == 3) {
             this.O = interLL(
-                perp_bisect(args[0], args[1]),
-                perp_bisect(args[1], args[2])
+                perpBisect(args[0], args[1]),
+                perpBisect(args[1], args[2]),
             );
             this.r = distance(this.O, args[1]);
             return;

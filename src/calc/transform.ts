@@ -1,14 +1,29 @@
 import { argError } from "../errors.ts";
 import { Circle, GObject, Line, Point } from "../objects.ts";
-import { interLL, isParallel } from "./basic.ts";
+import {
+    distanceSq,
+    interLC,
+    interLL,
+    isOverlap,
+    isParallel,
+    isThrough,
+    midpoint,
+    perp,
+    projection,
+} from "./basic.ts";
 
-export function reflectIn(X: Point, P: Point): Point;
-export function reflectIn(X: Line, P: Point): Line;
-export function reflectIn(X: Circle, P: Point): Circle;
-export function reflectIn(X: Point, P: Line): Point;
-export function reflectIn(X: Line, P: Line): Line;
-export function reflectIn(X: Circle, P: Line): Circle;
-export function reflectIn(X: GObject, Y: Point | Line) {
+/**
+ * Reflect an object `X` in another object `Y`. When `Y` is a circle this means inversion.
+ */
+export function reflectIn(A: Point, P: Point): Point;
+export function reflectIn(l: Line, P: Point): Line;
+export function reflectIn(c: Circle, P: Point): Circle;
+export function reflectIn(A: Point, k: Line): Point;
+export function reflectIn(l: Line, k: Line): Line;
+export function reflectIn(c: Circle, k: Line): Circle;
+export function reflectIn(A: Point, c: Circle): Point;
+export function reflectIn(x: Line | Circle, c: Circle): Line | Circle;
+export function reflectIn(X: GObject, Y: GObject) {
     if (Y instanceof Point) {
         if (X instanceof Point) {
             return new Point(2 * Y.x - X.x, 2 * Y.y - X.y);
@@ -41,6 +56,38 @@ export function reflectIn(X: GObject, Y: Point | Line) {
         } else if (X instanceof Circle) {
             return new Circle(reflectIn(X.O, Y), X.r);
         }
+    } else if (Y instanceof Circle) {
+        return invert(X, Y.O, Y.r * Y.r);
     }
     throw argError("reflect", [X, Y]);
+}
+
+export function invert(A: Point, O: Point, p: number): Point;
+export function invert(x: Line | Circle, O: Point, p: number): Line | Circle;
+export function invert(A: GObject, O: Point, p: number): GObject;
+export function invert(X: GObject, O: Point, p: number) {
+    if (X instanceof Point) {
+        if (isOverlap(X, O)) throw new Error("Inverting the center itself");
+        const dx = X.x - O.x;
+        const dy = X.y - O.y;
+        const scale = p / distanceSq(X, O);
+        return new Point(O.x + scale * dx, O.y + scale * dy);
+    } else if (X instanceof Line) {
+        if (isThrough(X, O)) return X;
+        const P = projection(O, X);
+        const O1 = midpoint(invert(P, O, p), O);
+        return new Circle(O1, O);
+    } else if (X instanceof Circle) {
+        if (isThrough(X, O)) {
+            const P = midpoint(invert(X.O, O, p), O);
+            return perp(P, new Line(P, O));
+        } else {
+            const [A, B] = interLC(new Line(O, X.O), X);
+            const A0 = invert(A, O, p);
+            const B0 = invert(B, O, p);
+            const O1 = midpoint(A0, B0);
+            return new Circle(O1, A0);
+        }
+    }
+    throw argError("invert", [X, O, p]);
 }

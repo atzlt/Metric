@@ -32,7 +32,7 @@ Deno.test({
         assertEquals(k.C, -1);
         const O = interLL(m, n);
         assertEquals(O.x, 0.5);
-        const c = new Circle(A, B, C);
+        const c = new Circle(A, B, D);
         const c0 = new Circle(O, A);
         assertEquals(c.O.x, 0.5);
         assertEquals(c.r, c0.r);
@@ -42,6 +42,8 @@ Deno.test({
         assertThrows(() => new Circle(A, B, E));
         assertEquals(B.toString(), "(0, 1)");
         assertEquals(m.toString(), "x + y + -1 = 0");
+        assertEquals((new Line(4, 2, -3)).toString(), "4x + 2y + -3 = 0");
+        assertEquals((new Line(0, 1, -3)).toString(), "y + -3 = 0");
     },
 });
 

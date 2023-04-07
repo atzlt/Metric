@@ -1,7 +1,4 @@
-import {
-    assertAlmostEquals,
-    assertEquals,
-} from "https://deno.land/std@0.182.0/testing/asserts.ts";
+import { assertAlmostEquals, assertEquals } from "https://deno.land/std@0.182.0/testing/asserts.ts";
 import { onCircle, onSegment } from "../src/calc/point_on.ts";
 import { Circle, Point } from "../src/objects.ts";
 
@@ -21,6 +18,9 @@ Deno.test({
     name: "onSegment",
     fn() {
         assertEquals(onSegment([new Point(0, 1), new Point(1, 0)], 5).x, 5);
-        assertEquals(onSegment([new Point(0, 1), new Point(1, 0)], -1.5).y, 2.5);
+        assertEquals(
+            onSegment([new Point(0, 1), new Point(1, 0)], -1.5).y,
+            2.5,
+        );
     },
 });

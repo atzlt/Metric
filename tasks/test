@@ -1,5 +1,5 @@
 deno test --coverage=coverage/cov_profile test/
 deno coverage --lcov --output=coverage/cov.lcov \
-    --exclude="(src/errors.ts)|(src/calc/advanced/.*)|(test/.*)" \
+    --exclude="(src/errors.ts)|(src/calc/advanced/.*)|(test/.*)|(src/index.ts)" \
     coverage/cov_profile
 genhtml -o coverage/cov_html coverage/cov.lcov

@@ -1,9 +1,8 @@
 import { Line, Point } from "../../../objects.ts";
 import { angleBisect } from "../../angle.ts";
 import { center, distanceSq, interLL, midpoint, perp, perpBisect } from "../../basic.ts";
-import { onSegment } from "../../point_on.ts";
 import { reflectIn } from "../../transform.ts";
-import { Triangle, sideLength } from "./basic.ts";
+import { sideLength, Triangle } from "./basic.ts";
 
 export function isogonalConjugate([A, B, C]: Triangle, P: Point) {
     const l1 = angleBisect(A, B, C)[0];
@@ -17,15 +16,15 @@ export function isogonalConjugate([A, B, C]: Triangle, P: Point) {
  * Returns a point from its barycentric coordinates, i.e. `x : y : z = S(BPC) : S(CPB) : S(BPA)`,
  * where `S(...)` denotes (signed) area.
  */
-export function fromBarycentric([A, B, C]: Triangle, [x, y, z]: [number, number, number]) {
-    if (y == 0 && z == 0) return A;
-    else if (z == 0 && x == 0) return B;
-    else if (x == 0 && y == 0) return C;
-    else {
-        const X = onSegment([B, C], z / (y + z));
-        const Y = onSegment([C, A], x / (z + x));
-        return interLL(new Line(A, X), new Line(B, Y));
-    }
+export function fromBarycentric(
+    [A, B, C]: Triangle,
+    [x, y, z]: [number, number, number],
+) {
+    const s = x + y + z;
+    return new Point(
+        (A.x * x + B.x * y + C.x * z) / s,
+        (A.y * x + B.y * y + C.y * z) / s,
+    );
 }
 
 export function circumcenter([A, B, C]: Triangle) {

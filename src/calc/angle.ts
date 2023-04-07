@@ -44,7 +44,7 @@ export function angleBisect(l: Line, k: Line): Line[];
 export function angleBisect(A: Point, O: Point, B: Point): Line[];
 export function angleBisect(...args: (Point | Line)[]) {
     if (args.length == 2) {
-        const [l, k] = <Line[]>args;
+        const [l, k] = <Line[]> args;
         const m = Math.sqrt(l.A * l.A + l.B * l.B);
         const n = Math.sqrt(k.A * k.A + k.B * k.B);
         const A = l.A / m;
@@ -53,9 +53,12 @@ export function angleBisect(...args: (Point | Line)[]) {
         const A0 = k.A / n;
         const B0 = k.B / n;
         const C0 = k.C / n;
-        return [new Line(A + A0, B + B0, C + C0), new Line(A - A0, B - B0, C - C0)];
+        return [
+            new Line(A + A0, B + B0, C + C0),
+            new Line(A - A0, B - B0, C - C0),
+        ];
     } else if (args.length == 3) {
-        const [A, O, B] = <Point[]>args;
+        const [A, O, B] = <Point[]> args;
         return angleBisect(new Line(O, A), new Line(O, B));
     }
     throw argError("angle bisector", args);

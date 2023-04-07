@@ -17,7 +17,7 @@ jobs:
             - name: Run test
               run: deno test --coverage=coverage/cov_profile test/
             - name: Generace LCOV
-              run: deno coverage --lcov --output=coverage/cov.lcov --exclude="(src/errors.ts)|(src/calc/advanced/.*)|(test/.*)" coverage/cov_profile
+              run: deno coverage --lcov --output=coverage/cov.lcov --exclude="(src/errors.ts)|(src/calc/advanced/.*)|(test/.*)|(src/index.ts)" coverage/cov_profile
             - name: Collect coverage
               uses: codecov/codecov-action@v3.1.1
               with:

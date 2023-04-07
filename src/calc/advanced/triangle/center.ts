@@ -1,6 +1,13 @@
 import { Line, Point } from "../../../objects.ts";
-import { angleBisect } from "../../angle.ts";
-import { center, distanceSq, interLL, midpoint, perp, perpBisect } from "../../basic.ts";
+import {
+    angleBisect,
+    center,
+    distanceSq,
+    interLL,
+    midpoint,
+    perp,
+    perpBisect,
+} from "../../basic.ts";
 import { reflectIn } from "../../transform.ts";
 import { sideLength, Triangle } from "./basic.ts";
 

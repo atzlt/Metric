@@ -1,7 +1,6 @@
 import { assert, assertAlmostEquals } from "https://deno.land/std@0.182.0/testing/asserts.ts";
-import { isOverlap } from "../src/calc/basic.ts";
-import { ab, Circle, Line, o, p, rt } from "../src/index.ts";
-import { angle, DEG, ROUND } from "../src/calc/angle.ts";
+import { angle, isOverlap } from "../src/calc/basic.ts";
+import { ab, Circle, Line, o, p, rt, ROUND, DEG } from "../src/index.ts";
 import { O, xx, yy } from "../src/objects.ts";
 
 Deno.test({

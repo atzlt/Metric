@@ -3,7 +3,7 @@ import {
     assertEquals,
     assertThrows,
 } from "https://deno.land/std@0.182.0/testing/asserts.ts";
-import { Circle, Line, Point } from "../src/objects.ts";
+import { Circle, Line } from "../src/objects.ts";
 import { isOverlap, isParallel, isThrough } from "../src/calc/basic.ts";
 import { o, p, refl } from "../src/index.ts";
 

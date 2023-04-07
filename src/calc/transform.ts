@@ -91,3 +91,29 @@ export function invert(X: GObject, O: Point, p: number) {
     }
     throw argError("invert", [X, O, p]);
 }
+
+export function rotate(A: Point, O: Point, angle: number): Point;
+export function rotate(l: Line, O: Point, angle: number): Line;
+export function rotate(c: Circle, O: Point, angle: number): Circle;
+export function rotate(X: GObject, O: Point, angle: number) {
+    if (X instanceof Point) {
+        const x0 = X.x - O.x;
+        const y0 = X.y - O.y;
+        const s = Math.sin(angle);
+        const c = Math.cos(angle);
+        return new Point(
+            x0 * c - y0 * s + O.y,
+            y0 * c + x0 * s + O.y,
+        );
+    } else if (X instanceof Circle) {
+        return new Circle(rotate(X.O, O, angle), X.r);
+    } else if (X instanceof Line) {
+        const s = -Math.sin(angle);
+        const c = Math.cos(angle);
+        const A0 = X.A * c + X.B * s;
+        const B0 = X.B * c - X.A * s;
+        const C = X.A * O.x + X.B * O.y + X.C;
+        return new Line(A0, B0, C - O.x * A0 - O.y * B0);
+    }
+    throw argError("rotate", [X, O, angle]);
+}

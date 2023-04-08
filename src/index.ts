@@ -11,11 +11,11 @@ import {
     perpBisect,
 } from "./calc/basic.ts";
 import { onCircle, onSegment } from "./calc/point_on.ts";
-import * as calc from "./calc/mod.ts";
 import { argError } from "./errors.ts";
 import { Circle, Line, Point } from "./objects.ts";
-import * as centers from "./calc/advanced/triangle/center.ts";
 import { reflectIn, rotate } from "./calc/transform.ts";
+export * as calc from "./calc/mod.ts";
+export * as centers from "./calc/advanced/triangle/center.ts";
 
 /**
  * Shorthand for `new Point`.
@@ -92,8 +92,6 @@ export {
     $,
     ab,
     ang,
-    calc,
-    centers,
     Circle,
     d,
     d2,

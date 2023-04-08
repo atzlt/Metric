@@ -22,4 +22,4 @@ jobs:
               uses: codecov/codecov-action@v3.1.1
               with:
                   file: ./coverage/cov.lcov
-                  token: ${{ secrets.CODECOV_TOKEN }}
+                  token: ${{ secrets[2]ODECOV_TOKEN }}

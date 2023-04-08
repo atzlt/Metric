@@ -1,4 +1,4 @@
-import { Line, Point } from "../../../objects.ts";
+import { line, Point, point } from "../../../objects.ts";
 import {
     angleBisect,
     center,
@@ -16,7 +16,7 @@ export function isogonalConjugate([A, B, C]: Triangle, P: Point) {
     const l2 = angleBisect(B, C, A)[0];
     const P1 = reflectIn(P, l1);
     const P2 = reflectIn(P, l2);
-    return interLL(new Line(B, P1), new Line(C, P2));
+    return interLL(line(B, P1), line(C, P2));
 }
 
 /**
@@ -28,9 +28,9 @@ export function fromBarycentric(
     [x, y, z]: [number, number, number],
 ) {
     const s = x + y + z;
-    return new Point(
-        (A.x * x + B.x * y + C.x * z) / s,
-        (A.y * x + B.y * y + C.y * z) / s,
+    return point(
+        (A[0] * x + B[0] * y + C[0] * z) / s,
+        (A[1] * x + B[1] * y + C[1] * z) / s,
     );
 }
 
@@ -50,7 +50,7 @@ export function excenter([A, B, C]: Triangle) {
 }
 
 export function orthocenter([A, B, C]: Triangle) {
-    return interLL(perp(A, new Line(B, C)), perp(B, new Line(C, A)));
+    return interLL(perp(A, line(B, C)), perp(B, line(C, A)));
 }
 
 export function centroid([A, B, C]: Triangle) {

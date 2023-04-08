@@ -91,44 +91,44 @@ export function interLL(l: Line, k: Line): Point {
  * @returns The list of intersections. If there are none, returns an empty list `[]`.
  */
 export function interLC(l: Line, c: Circle, common?: Point): Point[] {
-    const O = c[0];
-    const r = c[1];
-    if (l[0] != 0) {
-        const ya = l[0] * l[0] + l[1] * l[1];
-        const yb = 2 * ((l[0] * O[0] + l[2]) * l[1] - l[0] * l[0] * O[1]);
+    const [O, r] = c;
+    const [A, B, C] = l;
+    if (A != 0) {
+        const ya = A * A + B * B;
+        const yb = 2 * ((A * O[0] + C) * B - A * A * O[1]);
         if (common) {
             const y2 = -yb / ya - common[1];
-            return [point(-(l[1] * y2 + l[2]) / l[0], y2)];
+            return [point(-(B * y2 + C) / A, y2)];
         } else {
-            const yc = l[0] * l[0] * (O[1] * O[1] - r * r) +
-                (l[0] * O[0] + l[2]) * (l[0] * O[0] + l[2]);
+            const yc = A * A * (O[1] * O[1] - r * r) +
+                (A * O[0] + C) * (A * O[0] + C);
             let D = yb * yb - 4 * ya * yc;
             if (D < 0) return [];
             D = Math.sqrt(D);
             const y1 = (-yb + D) / ya / 2;
             const y2 = (-yb - D) / ya / 2;
             return [
-                point(-(l[1] * y1 + l[2]) / l[0], y1),
-                point(-(l[1] * y2 + l[2]) / l[0], y2),
+                point(-(B * y1 + C) / A, y1),
+                point(-(B * y2 + C) / A, y2),
             ];
         }
     } else {
-        const xa = l[1] * l[1];
-        const xb = 2 * -l[1] * l[1] * O[0];
+        const xa = B * B;
+        const xb = 2 * -B * B * O[0];
         if (common) {
             const x2 = -xb / xa - common[0];
-            return [point(x2, -l[2] / l[1])];
+            return [point(x2, -C / B)];
         } else {
-            const xc = l[1] * l[1] * (O[0] * O[0] - r * r) +
-                (l[1] * O[1] + l[2]) * (l[1] * O[1] + l[2]);
+            const xc = B * B * (O[0] * O[0] - r * r) +
+                (B * O[1] + C) * (B * O[1] + C);
             let D = xb * xb - 4 * xa * xc;
             if (D < 0) return [];
             D = Math.sqrt(D);
             const x1 = (-xb + D) / xa / 2;
             const x2 = (-xb - D) / xa / 2;
             return [
-                point(x1, -l[2] / l[1]),
-                point(x2, -l[2] / l[1]),
+                point(x1, -C / B),
+                point(x2, -C / B),
             ];
         }
     }
@@ -139,12 +139,14 @@ export function interLC(l: Line, c: Circle, common?: Point): Point[] {
  * @returns The radical axis.
  */
 export function radicalAxis(c: Circle, d: Circle) {
-    const D1 = -2 * c[0][0];
-    const E1 = -2 * c[0][1];
-    const F1 = c[0][0] * c[0][0] + c[0][1] * c[0][1] - c[1] * c[1];
-    const D2 = -2 * d[0][0];
-    const E2 = -2 * d[0][1];
-    const F2 = d[0][0] * d[0][0] + d[0][1] * d[0][1] - d[1] * d[1];
+    const O = c[0];
+    const P = d[0];
+    const D1 = -2 * O[0];
+    const E1 = -2 * O[1];
+    const F1 = O[0] * O[0] + O[1] * O[1] - c[1] * c[1];
+    const D2 = -2 * P[0];
+    const E2 = -2 * P[1];
+    const F2 = P[0] * P[0] + P[1] * P[1] - d[1] * d[1];
     return line(D1 - D2, E1 - E2, F1 - F2);
 }
 
@@ -280,11 +282,12 @@ export function perp(X: Point | Line, Y: Point | Line) {
     throw argError("perpendicular", [X, Y]);
 }
 
-export function projection(A: Point, l: Line) {
-    const n = l[0] * l[0] + l[1] * l[1];
+export function projection(P: Point, l: Line) {
+    const [A, B, C] = l;
+    const n = A * A + B * B;
     return point(
-        (l[1] * l[1] * A[0] - l[0] * l[2] - l[0] * l[1] * A[1]) / n,
-        (l[0] * l[0] * A[1] - l[1] * l[2] - l[0] * l[1] * A[0]) / n,
+        (B * B * P[0] - A * C - A * B * P[1]) / n,
+        (A * A * P[1] - B * C - A * B * P[0]) / n,
     );
 }
 
@@ -301,17 +304,19 @@ export function angleBisect(A: Point, O: Point, B: Point): Line[];
 export function angleBisect(...args: [Line, Line] | [Point, Point, Point]) {
     if (args.length == 2) {
         const [l, k] = args;
-        const m = Math.sqrt(l[0] * l[0] + l[1] * l[1]);
-        const n = Math.sqrt(k[0] * k[0] + k[1] * k[1]);
-        const A = l[0] / m;
-        const B = l[1] / m;
-        const C = l[2] / m;
-        const A0 = k[0] / n;
-        const B0 = k[1] / n;
-        const C0 = k[2] / n;
+        const [A, B, C] = l;
+        const [E, F, G] = k;
+        const m = Math.sqrt(A * A + B * B);
+        const n = Math.sqrt(E * E + F * F);
+        const A0 = A / m;
+        const B0 = B / m;
+        const C0 = C / m;
+        const A1 = E / n;
+        const B1 = F / n;
+        const C1 = G / n;
         return [
-            line(A + A0, B + B0, C + C0),
-            line(A - A0, B - B0, C - C0),
+            line(A0 + A1, B0 + B1, C0 + C1),
+            line(A0 - A1, B0 - B1, C0 - C1),
         ];
     } else if (args.length == 3) {
         const [A, O, B] = args;
@@ -321,8 +326,10 @@ export function angleBisect(...args: [Line, Line] | [Point, Point, Point]) {
 }
 
 export function angle(l: Line, k: Line) {
-    const a = l[0] * l[0] + l[1] * l[1];
-    const b = k[0] * k[0] + k[1] * k[1];
-    const p = (l[0] * k[0] + l[1] * k[1]) / Math.sqrt(a * b);
+    const [A, B] = l;
+    const [C, D] = k;
+    const a = A * A + B * B;
+    const b = C * C + D * D;
+    const p = (A * C + B * D) / Math.sqrt(a * b);
     return Math.acos(Math.abs(p));
 }

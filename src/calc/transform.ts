@@ -113,16 +113,16 @@ export function rotate(X: GObject, O: Point, angle: number) {
         const s = Math.sin(angle);
         const c = Math.cos(angle);
         return point(
-            x0 * c - y0 * s + O[1],
+            x0 * c - y0 * s + O[0],
             y0 * c + x0 * s + O[1],
         );
     } else if (isCircle(X)) {
         return circle(rotate(X[0], O, angle), X[1]);
     } else if (isLine(X)) {
-        const s = -Math.sin(angle);
+        const s = Math.sin(angle);
         const c = Math.cos(angle);
-        const A0 = X[0] * c + X[1] * s;
-        const B0 = X[1] * c - X[0] * s;
+        const A0 = X[0] * c - X[1] * s;
+        const B0 = X[1] * c + X[0] * s;
         const C = X[0] * O[0] + X[1] * O[1] + X[2];
         return line(A0, B0, C - O[0] * A0 - O[1] * B0);
     }

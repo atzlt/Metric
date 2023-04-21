@@ -15,8 +15,10 @@ import {
     parallel,
     perp,
     projection,
+    polarLine,
 } from "../src/calc/basic.ts";
 import { circle, line, point } from "../src/objects.ts";
+import { tangent } from "../src/index.ts";
 
 Deno.test({
     name: "GObjects definition",
@@ -145,3 +147,19 @@ Deno.test({
         assertAlmostEquals(H[1], -4);
     },
 });
+
+Deno.test({
+    name: "tangent, polar line",
+    fn() {
+        const c = circle([0, 0], 1);
+        const A = point(Math.SQRT2, 0);
+        const l = line(1, 0, -Math.SQRT1_2);
+        const s = line(1, 1, A);
+        const t = line(1, -1, A);
+        const l0 = polarLine(A, c);
+        const [s0, t0] = tangent(A, c);
+        assert(isOverlap(l, l0));
+        assert(isOverlap(s, s0));
+        assert(isOverlap(t, t0));
+    }
+})

@@ -216,6 +216,17 @@ export function distance(X: Point | Line, Y: Point | Line) {
     return Math.sqrt(distanceSq(X, Y));
 }
 
+export function polarLine(A: Point, c: Circle) {
+    const [x0, y0] = A;
+    const [[a, b], r] = c;
+    return line(x0 - a, y0 - b, a * (a - x0) + b * (b - y0) - r * r);
+}
+
+export function tangent(A: Point, c: Circle) {
+    const [P, Q] = interLC(polarLine(A, c), c);
+    return [line(A, P), line(A, Q)];
+}
+
 /**
  * Find the midpoint of two points.
  * @returns The midpoint.

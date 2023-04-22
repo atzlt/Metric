@@ -1,3 +1,1 @@
-import * as center from "./center.ts";
-
-export default { center };
+export * as center from "./center.ts";

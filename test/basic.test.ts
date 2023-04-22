@@ -14,8 +14,8 @@ import {
     isThrough,
     parallel,
     perp,
-    projection,
     polarLine,
+    projection,
 } from "../src/calc/basic.ts";
 import { circle, line, point } from "../src/objects.ts";
 import { tangent } from "../src/index.ts";
@@ -153,13 +153,17 @@ Deno.test({
     fn() {
         const c = circle([0, 0], 1);
         const A = point(Math.SQRT2, 0);
+        const B = point(1, 0);
         const l = line(1, 0, -Math.SQRT1_2);
+        const k = line(1, 0, B);
         const s = line(1, 1, A);
         const t = line(1, -1, A);
         const l0 = polarLine(A, c);
         const [s0, t0] = tangent(A, c);
+        const [k0] = tangent(B, c);
         assert(isOverlap(l, l0));
+        assert(isOverlap(k, k0));
         assert(isOverlap(s, s0));
         assert(isOverlap(t, t0));
-    }
-})
+    },
+});

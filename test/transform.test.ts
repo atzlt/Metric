@@ -5,7 +5,7 @@ import {
 } from "https://deno.land/std@0.182.0/testing/asserts.ts";
 import { Circle, circle, Line, line, point } from "../src/objects.ts";
 import { isOverlap, isParallel, isThrough } from "../src/calc/basic.ts";
-import { reflectIn } from "../src/calc/transform.ts";
+import { reflectIn, scale } from "../src/calc/transform.ts";
 
 Deno.test({
     name: "reflect",
@@ -48,5 +48,24 @@ Deno.test({
         assert(isOverlap(<Circle> reflectIn(einv, c), e));
         assert(isOverlap(<Line> reflectIn(l, d), l));
         assertThrows(() => reflectIn(c[0], c));
+    },
+});
+
+Deno.test({
+    name: "scale",
+    fn() {
+        const O = point(-1, 0);
+        const A = point(1, 2);
+        const B = point(3, 4);
+        const l = line(1, -1, A);
+        const k = line(1, -1, B);
+        const c = circle(A, 3);
+        const d = circle(B, 6);
+        const B0 = scale(A, O, 2);
+        const k0 = scale(l, O, 2);
+        const d0 = scale(c, O, 2);
+        assert(isOverlap(B, B0));
+        assert(isOverlap(k, k0));
+        assert(isOverlap(d, d0));
     },
 });

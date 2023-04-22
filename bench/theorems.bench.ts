@@ -1,5 +1,16 @@
 import { assert, assertAlmostEquals } from "https://deno.land/std@0.182.0/testing/asserts.ts";
-import { center, distance, inter, isCollinear, isOverlap, isParallel } from "../src/calc/basic.ts";
+import {
+    center,
+    DEG,
+    distance,
+    inter,
+    interLC,
+    interLL,
+    isCollinear,
+    isOverlap,
+    isParallel,
+    tangent,
+} from "../src/calc/basic.ts";
 import { onCircle } from "../src/calc/point_on.ts";
 import {
     circumcenter,
@@ -67,5 +78,20 @@ Deno.bench({
         const K = symmedian([A, B, C]);
         const K0 = fromBarycentric([A, B, C], [a * a, b * b, c * c]);
         assert(isOverlap(K, K0));
+    },
+});
+
+Deno.bench({
+    name: "Harmonic Quadrilateral",
+    fn() {
+        const c = circle(point(0, 0), 1);
+        const A = onCircle(c, 0);
+        const B = onCircle(c, 62 * DEG);
+        const C = onCircle(c, 118 * DEG);
+        const T = interLL(tangent(A, c)[0], tangent(C, c)[0]);
+        const D = interLC(line(T, B), c, B)[0];
+        const x = distance(A, B) * distance(C, D);
+        const y = distance(B, C) * distance(D, A);
+        assertAlmostEquals(x, y);
     },
 });

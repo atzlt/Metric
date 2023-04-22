@@ -1,5 +1,3 @@
-import * as basic from "./basic.ts";
-import * as point_on from "./point_on.ts";
-import * as transform from "./transform.ts";
-
-export default { basic, point_on, transform };
+export * as basic from "./basic.ts";
+export * as point_on from "./point_on.ts";
+export * as transform from "./transform.ts";

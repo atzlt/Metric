@@ -128,3 +128,23 @@ export function rotate(X: GObject, O: Point, angle: number) {
     }
     throw argError("rotate", [X, O, angle]);
 }
+
+export function scale(A: Point, O: Point, r: number): Point;
+export function scale(A: Line, O: Point, r: number): Line;
+export function scale(A: Circle, O: Point, r: number): Circle;
+export function scale(X: GObject, O: Point, r: number) {
+    if (isPoint(X)) {
+        return point(
+            r * X[0] - (r - 1) * O[0],
+            r * X[1] - (r - 1) * O[1],
+        );
+    } else if (isLine(X)) {
+        return line(
+            X[0],
+            X[1],
+            X[0] * (r - 1) * O[0] + X[1] * (r - 1) * O[1] + X[2] * r,
+        );
+    } else if (isCircle(X)) {
+        return circle(scale(X[0], O, r), r * X[1]);
+    }
+}

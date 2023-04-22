@@ -223,8 +223,12 @@ export function polarLine(A: Point, c: Circle) {
 }
 
 export function tangent(A: Point, c: Circle) {
-    const [P, Q] = interLC(polarLine(A, c), c);
-    return [line(A, P), line(A, Q)];
+    if (isThrough(c, A)) {
+        return [perp(A, line(A, c[0]))];
+    } else {
+        const [P, Q] = interLC(polarLine(A, c), c);
+        return [line(A, P), line(A, Q)];
+    }
 }
 
 /**

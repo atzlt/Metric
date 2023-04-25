@@ -340,11 +340,26 @@ export function angleBisect(...args: [Line, Line] | [Point, Point, Point]) {
     throw argError("angle bisector", args);
 }
 
-export function angle(l: Line, k: Line) {
-    const [A, B] = l;
-    const [C, D] = k;
-    const a = A * A + B * B;
-    const b = C * C + D * D;
-    const p = (A * C + B * D) / Math.sqrt(a * b);
-    return Math.acos(Math.abs(p));
+export function angle(l: Line, k: Line): number;
+export function angle(A: Point, B: Point, C: Point): number;
+export function angle(...args: [Line, Line] | [Point, Point, Point]) {
+    let [A, B, C, D] = [0, 0, 0, 0];
+    if (args.length == 2) {
+        [A, B] = args[0];
+        [C, D] = args[1];
+        const a = A * A + B * B;
+        const b = C * C + D * D;
+        const p = (A * C + B * D) / Math.sqrt(a * b);
+        const t = Math.acos(Math.abs(p));
+        return t;
+    } else if (args.length == 3) {
+        const [P, O, Q] = args;
+        [A, B] = [P[1] - O[1], O[0] - P[0]];
+        [C, D] = [Q[1] - O[1], O[0] - Q[0]];
+        const a = A * A + B * B;
+        const b = C * C + D * D;
+        const p = (A * C + B * D) / Math.sqrt(a * b);
+        const t = Math.acos(p);
+        return t;
+    }
 }

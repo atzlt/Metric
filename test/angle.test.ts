@@ -27,9 +27,48 @@ Deno.test({
         assertAlmostEquals(
             Math.PI / 4,
             angle(
+                line(1, -1, 1),
+                line(1, 0, 0),
+            ),
+        );
+        assertAlmostEquals(
+            Math.PI / 4,
+            angle(
                 line(0, 1, 0),
                 line(1, -1, 1),
             ),
+        );
+        assertAlmostEquals(
+            Math.PI / 3,
+            angle(
+                point(Math.sqrt(3), -1),
+                point(0, 0),
+                point(Math.sqrt(3), 1),
+            )
+        );
+        assertAlmostEquals(
+            Math.PI / 3,
+            angle(
+                point(Math.sqrt(3), 1),
+                point(0, 0),
+                point(Math.sqrt(3), -1),
+            )
+        );
+        assertAlmostEquals(
+            Math.PI * 2 / 3,
+            angle(
+                point(-Math.sqrt(3), -1),
+                point(0, 0),
+                point(Math.sqrt(3), -1),
+            )
+        );
+        assertAlmostEquals(
+            Math.PI * 2 / 3,
+            angle(
+                point(Math.sqrt(3), -1),
+                point(0, 0),
+                point(-Math.sqrt(3), -1),
+            )
         );
     },
 });
